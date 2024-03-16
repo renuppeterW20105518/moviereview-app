@@ -16,6 +16,14 @@ export class MoviereviewAppStack extends cdk.Stack {
       memorySize: 128,
     });
 
+    const reviewFnURL = reviewFn.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.AWS_IAM,
+      cors: {
+        allowedOrigins: ["*"],
+      },
+    });
+
+    new cdk.CfnOutput(this, "Review Function Url", { value: reviewFnURL.url });
 
   }
 }

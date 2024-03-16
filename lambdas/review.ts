@@ -8,7 +8,7 @@ export const handler: Handler = async (event, context) => {
       headers: {
         "content-type": "application/json",
       },
-      body: { message: "This is a message returned from lambda Function" },
+      body: { message: "This is the message that the lambda function returned." },
     };
   } catch (error) {
     console.log(error);
