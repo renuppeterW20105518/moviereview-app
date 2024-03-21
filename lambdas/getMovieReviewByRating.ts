@@ -46,7 +46,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     //     headers: {
     //       "content-type": "application/json",
     //     },
-    //     body: JSON.stringify({ message: "Rating is between 1 and 5" }),
+    //     body: JSON.stringify({ message: "Rating is in between 1 and 5" }),
     //   };
     // }
     

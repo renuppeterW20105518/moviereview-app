@@ -1,5 +1,5 @@
-import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, QueryCommandInput,ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 
 const ddbDocClient = createDdbDocClient();
@@ -7,7 +7,8 @@ const ddbDocClient = createDdbDocClient();
 export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
   try {
     console.log("Event start: ", event);
-    const reviewerName = event.pathParameters?.reviewerName;
+    const parameters = event.pathParameters;
+    const reviewerName = parameters?.reviewerName;
 
     if (!reviewerName) {
       return {
@@ -21,16 +22,16 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
       };
     }
 
-    const commandInput: QueryCommandInput = {
-      TableName: process.env.TABLE_NAME,
-      IndexName: "reviewerIndex",
-      KeyConditionExpression: "reviewerName = :r",
-      ExpressionAttributeValues: {
-        ":r": { S: reviewerName }, // Assuming reviewerName is of type String in DynamoDB
-      },
-    };
-
-    const commandOutput = await ddbDocClient.send(new QueryCommand(commandInput));
+    const commandOutput = await ddbDocClient.send(new ScanCommand(
+      {
+        TableName: process.env.TABLE_NAME,
+        IndexName: "reviewerIndex",
+        FilterExpression: "begins_with(ReviewerName, :r)",
+        ExpressionAttributeValues: {
+          ":r": reviewerName,
+        },
+      }
+    ));
 
     console.log('QueryCommand response: ', commandOutput);
 
