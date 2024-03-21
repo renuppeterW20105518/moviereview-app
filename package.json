@@ -33,5 +33,10 @@
    "aws-sdk": "^2.1575.0",
    "constructs": "^10.0.0",
    "source-map-support": "^0.5.21"
- }
+ },
+ "browser": {
+  "fs": false,
+  "path": false,
+  "os": false
+}
 }

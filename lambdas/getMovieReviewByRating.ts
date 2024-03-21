@@ -40,15 +40,15 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     const parameters = event?.pathParameters;
     const MovieId = parameters?.movieId ? parseInt(parameters.movieId) : undefined;
     const minRating = queryParams?.minRating ? parseInt(queryParams.minRating) : undefined;
-    // if (minRating !== undefined && (minRating < 1 || minRating > 5)) {
-    //   return {
-    //     statusCode: 400,
-    //     headers: {
-    //       "content-type": "application/json",
-    //     },
-    //     body: JSON.stringify({ message: "Rating is in between 1 and 5" }),
-    //   };
-    // }
+    if (minRating !== undefined && (minRating < 1 || minRating > 5)) {
+      return {
+        statusCode: 400,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ message: "Rating is in between 1 and 5" }),
+      };
+    }
     
 
     let commandInput: QueryCommandInput = { TableName: process.env.TABLE_NAME,};
