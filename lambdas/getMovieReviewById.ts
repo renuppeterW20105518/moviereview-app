@@ -42,9 +42,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
             };
         }
 
-        const body = {
-            data: commandOutput.Items,
-        };
+        const body = { data: commandOutput.Items,};
 
         return {
             statusCode: 200,

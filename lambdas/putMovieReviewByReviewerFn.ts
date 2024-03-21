@@ -11,8 +11,13 @@ const ddbDocClient = createDdbDocClient();
 
 export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
   try {
-    
-    console.log("Even Start: ", event);
+
+    console.log("Event Start: ", event);
+  
+    const parameters = event?.pathParameters;
+    const MovieId = parameters?.movieId ? parseInt(parameters.movieId) : undefined;
+    const ReviewerName = event.pathParameters?.reviewerName;
+
     const body = event.body ? JSON.parse(event.body) : undefined;
     if (!body) {
       return {
@@ -25,42 +30,47 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     }
 
     if (!isValidBodyParams(body)) {
+        return {
+          statusCode: 500,
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            message: `Incorrect type. Must match Movie Review schema`,
+            schema: schema.definitions["Movie"],
+          }),
+        };
+      }
+
+      const commandOutput = await ddbDocClient.send(
+      new PutCommand({
+        TableName: process.env.TABLE_NAME,
+        Item: {
+          movieId: MovieId,
+          reviewerName: ReviewerName,
+          ...body,
+        },
+      })
+    );
+
+    return {
+        statusCode: 201,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ message: "Update reviewer name" }),
+      };
+    } catch (error: any) {
+      console.log(JSON.stringify(error));
       return {
         statusCode: 500,
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({
-          message: `Incorrect type. Must match Movie Review schema`,
-          schema: schema.definitions["Movie"],
-        }),
+        body: JSON.stringify({ error }),
       };
     }
-
-    const commandOutput = await ddbDocClient.send(
-      new PutCommand({
-        TableName: process.env.TABLE_NAME,
-        Item: body,
-      })
-    );
-    return {
-      statusCode: 201,
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ message: "Movie Review added" }),
-    };
-  } catch (error: any) {
-    console.log(JSON.stringify(error));
-    return {
-      statusCode: 500,
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ error }),
-    };
-  }
-};
+  };
 
 function createDdbDocClient() {
   const ddbClient = new DynamoDBClient({ region: process.env.REGION });
