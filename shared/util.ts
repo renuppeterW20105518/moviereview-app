@@ -1,7 +1,7 @@
 import { marshall } from "@aws-sdk/util-dynamodb";
-import { MovieReview,MovieReviewMemberQueryParams } from "./types";
+import { MovieReviews,MovieReviewMemberQueryParams } from "./types";
 
-type Entity = MovieReview | MovieReviewMemberQueryParams;
+type Entity = MovieReviews | MovieReviewMemberQueryParams;
 
 export const generateItem = (entity: Entity) => {
   return {

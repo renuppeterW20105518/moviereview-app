@@ -1,15 +1,14 @@
-import { Aws } from "aws-cdk-lib";
 import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
 import * as apig from "aws-cdk-lib/aws-apigateway";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as node from "aws-cdk-lib/aws-lambda-nodejs";
-import * as lambdanode from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { generateBatch } from "../shared/util";
 import {moviereviews} from "../seed/moviereviews";
 import * as iam from "aws-cdk-lib/aws-iam";
+
+import { Construct } from "constructs";
 
 type AppApiProps = {
   userPoolId: string;
@@ -48,6 +47,22 @@ export class AppApi extends Construct {
       sortKey: { name: "ReviewDate", type: dynamodb.AttributeType.STRING },
     });
 
+    new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
+      onCreate: {
+        service: "DynamoDB",
+        action: "batchWriteItem",
+        parameters: {
+          RequestItems: {
+            [movieReviewsTable.tableName]: generateBatch(moviereviews),
+          },
+        },
+        physicalResourceId: custom.PhysicalResourceId.of("moviereviewsddbInitData"), 
+      },
+      policy: custom.AwsCustomResourcePolicy.fromSdkCalls({
+        resources: [movieReviewsTable.tableArn],
+      }),
+    });
+
     //#endRegion
 
     const appCommonFnProps = {
@@ -60,6 +75,7 @@ export class AppApi extends Construct {
         USER_POOL_ID: props.userPoolId,
         CLIENT_ID: props.userPoolClientId,
         REGION: cdk.Aws.REGION,
+        TABLE_NAME: movieReviewsTable.tableName,
       },
     };
 

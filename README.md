@@ -1,6 +1,6 @@
 ## Serverless REST Assignment.
 
-**Name:** Renu P Peter
+**Name:** Renu Palappamannil Peter
 
 **Video demonstration:** ..... URL of your Youtube video demonstration ....
 

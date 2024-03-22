@@ -1,6 +1,6 @@
-import {MovieReview} from '../shared/types'
+import {MovieReviews} from '../shared/types'
 
-export const moviereviews : MovieReview[] = [
+export const moviereviews : MovieReviews[] = [
     {
         MovieId: 1,
         ReviewerName: "Alice",
