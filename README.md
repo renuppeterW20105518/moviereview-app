@@ -1,14 +1,42 @@
-# Welcome to your CDK TypeScript project
+## Serverless REST Assignment.
 
-This is a blank project for CDK development with TypeScript.
+**Name:** Renu P Peter
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+**Video demonstration:** ..... URL of your Youtube video demonstration ....
 
-## Useful commands
+This repository contains an implementation of a serverless REST API for the AWS platform. The CDK framework is used to provision its infrastructure. The API's domain context is movie reviews.
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+### API endpoints.
+
+- `POST /movies/reviews`
+  - Description: Add a movie review to the database.
+- `GET /movies/{movieId}/reviews`
+  - Description: Get all the reviews for the specified movie.
+- `GET /movies/{movieId}/reviews?minRating=n`
+  - Description: Get the reviews for the specified movie with a rating greater than the minRating.
+- `GET /movies/{movieId}/reviews/{reviewerName}`
+  - Description: Get the review written by the named reviewer for the specified movie.
+- `PUT /movies/{movieId}/reviews/{reviewerName}`
+  - Description: Update the text of a review.
+- `GET /movies/{movieId}/reviews/{year}`
+  - Description: Get the reviews written in a specific year for a specific movie.
+- `GET /reviews/{reviewerName}`
+  - Description: Get all the reviews written by a specific reviewer.
+- `GET /reviews/{reviewerName}/{movieId}/translation?language=code`
+  - Description: Get a translated version of a movie review using the movie ID and reviewer name as the identifier.
+
+![](./Images/api1.png)
+
+![](./Images/api2.png)
+
+![](./Images/api3.png)
+
+### Authentication
+
+![](./Images/pool2.png)
+
+![](./Images/pool1.png)
+
+### Independent learning
+
+The source files `app-api.ts`, `auth-api.ts`,`auth-app-stack`, and `serverless-rest-api-assignment-stack.ts` provide evidence of the independent research and learning involved in implementing these aspects. 
