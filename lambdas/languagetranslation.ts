@@ -49,6 +49,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
           ":m": MovieId,
           ":r": ReviewerName,
         },
+        IndexName:"reviewerIndex"
       })
     );
 
